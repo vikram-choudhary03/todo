@@ -1,0 +1,37 @@
+version: '3.8'
+
+services: 
+  frontend:
+    build: ./client 
+    container_name: todo-app-client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    stdin_open: true
+    tty: true
+    
+  backend: 
+    build: ./server
+    restart: always
+    container_name: "todo-app-server"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017
+    ports: 
+      - "8000:8000"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mymongo-data:/data/db
+
+    
+volumes:
+  mymongo-data:
+  
+  
